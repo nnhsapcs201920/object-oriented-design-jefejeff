@@ -45,6 +45,14 @@ public class ComboLock
                 lockNumber = 40;
             }
         }
+        if(lockNumber == first)
+        {
+            firstCheck = true;
+        }
+        else if(lockNumber == third && firstCheck)
+        {
+            thirdCheck = true;
+        }
     }
 
     /**
