@@ -1,7 +1,7 @@
 /**
  * A class that models a combination lock
  *
- * @author jcheng3
+ * @author jcheng3 & eemilyshih
  * @version 28 January 2020
  */
 public class ComboLock
@@ -10,9 +10,9 @@ public class ComboLock
     private int second;
     private int third;
     private int lockNumber = 0;
-    private boolean firstCheck = false;
-    private boolean secondCheck = false;
-    private boolean thirdCheck = false;
+    private boolean firstCheck;
+    private boolean secondCheck;
+    private boolean thirdCheck;
 
     /**
      * Constructor for objects of class ComboLock
@@ -37,19 +37,32 @@ public class ComboLock
      */
     public void turnClockwise(int ticks)
     {
-        for(int i = 0; i <ticks; i++)
+        /* for(int i = 0; i < ticks; i++)
         {
-            lockNumber--;
-            if(lockNumber == 0)
-            {
-                lockNumber = 40;
-            }
+        if(lockNumber == 0)
+        {
+        lockNumber = 40;
+        }
+        lockNumber--;
+        }
+        if(lockNumber == first)
+        {
+        firstCheck = true;
+        }
+        else if(lockNumber == third && firstCheck)
+        {
+        thirdCheck = true;
+        } */
+        lockNumber -= ticks;
+        if(lockNumber < 0)
+        {
+            lockNumber = 40 + lockNumber;
         }
         if(lockNumber == first)
         {
             firstCheck = true;
         }
-        else if(lockNumber == third && firstCheck)
+        else if(lockNumber == third && firstCheck == true)
         {
             thirdCheck = true;
         }
@@ -60,17 +73,43 @@ public class ComboLock
      */
     public void turnCounterClockwise(int ticks)
     {
-        for(int i = 0; i <ticks; i++)
+        /* for(int i = 0; i < ticks; i++)
         {
-            lockNumber++;
-            if(lockNumber == 40)
-            {
-                lockNumber = 0;
-            }
+        if(lockNumber == 40)
+        {
+        lockNumber = 0;
+        }
+        lockNumber++;
+        }
+        if(lockNumber == second)
+        {
+        secondCheck = true;
+        } */
+        lockNumber =+ ticks;
+        if(lockNumber > 39)
+        {
+            lockNumber = lockNumber - 40;
         }
         if(lockNumber == second)
         {
             secondCheck = true;
+        } 
+    }
+
+    /**
+     * A method to open the lock, if all conditions are met
+     */
+    public boolean open()
+    {
+        boolean opened;
+        if(firstCheck && secondCheck && thirdCheck)
+        {
+            opened = true;
         }
+        else
+        {
+            opened = false;
+        }
+        return opened;
     }
 }

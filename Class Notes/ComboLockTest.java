@@ -8,15 +8,15 @@ public class ComboLockTest
 {
     public static void main(String[] args)
     {
-        int secret1 = 6;
-        int secret2 = 12;
-        int secret3 = 24;
+        int secret1 = 30;
+        int secret2 = 39;
+        int secret3 = 35;
 
         ComboLock lock = new ComboLock(secret1, secret2, secret3);
-
         Scanner in = new Scanner(System.in);
         boolean opened = false;
         boolean turningClockwise = true;
+        lock.reset();
         while(!opened)
         {
             System.out.println("What direction would you like to turn the lock? (cw or ccw): ");
@@ -36,9 +36,9 @@ public class ComboLockTest
             }
             else
             {
-                lock.turnCounterclockwise(ticks);
+                lock.turnCounterClockwise(ticks);
             }
-            
+
             opened = lock.open();
         }
         System.out.println("You opened the lock!");
