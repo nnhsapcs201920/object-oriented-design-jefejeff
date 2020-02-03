@@ -18,7 +18,7 @@ public class ChoiceQuestion extends Question
     /**
     Constructs a choice question with the specified question.
 
-    @param question the text of this question
+    @param question     the text of this question
      */
     public ChoiceQuestion( String question ) 
     {
@@ -28,8 +28,8 @@ public class ChoiceQuestion extends Question
 
     /**
     Adds an answer choice to this question.
-    @param choice the choice to add
-    @param correct true if this is the correct choice, false otherwise
+    @param      choice the choice to add
+    @param      correct true if this is the correct choice, false otherwise
      */
     public void addChoice(String choice, boolean correct)
     {
@@ -42,6 +42,7 @@ public class ChoiceQuestion extends Question
         }
     }
 
+    @Override
     public String toString()
     {
         // Display the question text
@@ -54,6 +55,6 @@ public class ChoiceQuestion extends Question
         }
 
         return str;
-   }
+    }
 }
 
