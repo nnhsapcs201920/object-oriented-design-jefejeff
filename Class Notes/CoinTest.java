@@ -1,7 +1,6 @@
 import java.util.Collections;
 import java.util.ArrayList;
 
-
 /**
  * Test class for Coin class
  *
@@ -25,7 +24,6 @@ public class CoinTest
         list.add(nickel);
 
         System.out.println(list);
-        Collections.sort(list);
         System.out.println(list);
     }
 }
