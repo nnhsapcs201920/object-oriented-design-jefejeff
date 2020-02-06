@@ -35,22 +35,6 @@ public class ComboLock
      */
     public void turnClockwise(int ticks)
     {
-        /* for(int i = 0; i < ticks; i++)
-        {
-        if(lockNumber == 0)
-        {
-        lockNumber = 40;
-        }
-        lockNumber--;
-        }
-        if(lockNumber == first)
-        {
-        firstCheck = true;
-        }
-        else if(lockNumber == third && firstCheck)
-        {
-        thirdCheck = true;
-        } */
         lockNumber = (lockNumber + 40 - ticks) % 40;
         if(lockNumber == first)
         {
@@ -73,18 +57,6 @@ public class ComboLock
      */
     public void turnCounterClockwise(int ticks)
     {
-        /* for(int i = 0; i < ticks; i++)
-        {
-        if(lockNumber == 40)
-        {
-        lockNumber = 0;
-        }
-        lockNumber++;
-        }
-        if(lockNumber == second)
-        {
-        secondCheck = true;
-        } */
         lockNumber = (lockNumber + ticks) % 40;
         if(lockNumber == second)
         {
