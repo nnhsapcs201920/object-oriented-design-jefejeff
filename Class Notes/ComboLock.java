@@ -10,9 +10,7 @@ public class ComboLock
     private int second;
     private int third;
     private int lockNumber = 0;
-    private boolean firstCheck;
-    private boolean secondCheck;
-    private boolean thirdCheck;
+    private int state = 0;
 
     /**
      * Constructor for objects of class ComboLock
@@ -53,18 +51,20 @@ public class ComboLock
         {
         thirdCheck = true;
         } */
-        lockNumber -= ticks;
-        if(lockNumber < 0)
-        {
-            lockNumber = 40 + lockNumber;
-        }
+        lockNumber = (lockNumber + 40 - ticks) % 40;
         if(lockNumber == first)
         {
-            firstCheck = true;
+            if(state == 0)
+            {
+                state++;
+            }
         }
-        else if(lockNumber == third && firstCheck == true)
+        else if(lockNumber == third)
         {
-            thirdCheck = true;
+            if(state == 2)
+            {
+                state++;
+            }
         }
     }
 
@@ -85,14 +85,14 @@ public class ComboLock
         {
         secondCheck = true;
         } */
-        lockNumber =+ ticks;
-        if(lockNumber > 39)
-        {
-            lockNumber = lockNumber - 40;
-        }
+        lockNumber = (lockNumber + ticks) % 40;
         if(lockNumber == second)
         {
-            secondCheck = true;
+
+            if(state == 1)
+            {
+                state++;
+            }
         } 
     }
 
@@ -102,7 +102,7 @@ public class ComboLock
     public boolean open()
     {
         boolean opened;
-        if(firstCheck && secondCheck && thirdCheck)
+        if(state == 3)
         {
             opened = true;
         }
