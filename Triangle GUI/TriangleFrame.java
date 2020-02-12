@@ -10,7 +10,7 @@ public class TriangleFrame extends JFrame
     public TriangleFrame()
     {
         this.component = new TriangleComponent();
-        
+
         this.add(component);
 
         this.setSize(FRAME_WIDTH, FRAME_HEIGHT);
@@ -18,7 +18,6 @@ public class TriangleFrame extends JFrame
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setVisible(true);
     }
-    
 
     public static void main(String [] args)
     {

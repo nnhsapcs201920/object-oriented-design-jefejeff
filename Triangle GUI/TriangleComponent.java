@@ -13,7 +13,7 @@ public class TriangleComponent extends JComponent
 
     public TriangleComponent()
     {
-        
+
     }
 
     @Override
@@ -22,6 +22,34 @@ public class TriangleComponent extends JComponent
         super.paintComponent( g );
         Graphics2D g2 = (Graphics2D) g;
 
+    }
+
+    public class TriangleListener implements MouseListener
+    {
+        @Override
+        public void mouseClicked(MouseEvent e)
+        {
+        }
+
+        @Override
+        public void mousePressed(MouseEvent e)
+        {
+        }
+
+        @Override
+        public void mouseReleased(MouseEvent e)
+        {
+        }
+
+        @Override
+        public void mouseEntered(MouseEvent e)
+        {
+        }
+
+        @Override
+        public void mouseExited(MouseEvent e)
+        {
+        }
     }
 
 }

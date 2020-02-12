@@ -72,9 +72,15 @@ public class Person implements Comparable<Person>
         people.add(p8);
         people.add(p9);
         people.add(p10);
-
-        System.out.println(people);
+        for (Person a : people)
+        {
+            System.out.print(a.getName());
+        }
+        System.out.println();
         Collections.sort(people);
-        System.out.println(people);
+        for (Person a : people)
+        {
+            System.out.print(a.getName());
+        }
     }
 }
