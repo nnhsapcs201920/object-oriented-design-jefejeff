@@ -11,13 +11,13 @@ public class TriangleComponent extends JComponent
 {
     private static final int MAX_POINTS = 3;
     private int clickCount = 0;
-    private Point2D.Double point1;
-    private Ellipse2D.Double circle;
-    private Point2D.Double point2;
-    private Line2D.Double line1;
-    private Point2D.Double point3;
-    private Line2D.Double line2;
-    private Line2D.Double line3;
+    private Point2D.Double point1 = null;
+    private Ellipse2D.Double circle = null;
+    private Point2D.Double point2 = null;
+    private Line2D.Double line1 = null;
+    private Point2D.Double point3 = null;
+    private Line2D.Double line2 = null;
+    private Line2D.Double line3 = null;
     private int mouseX;
     private int mouseY;
 
@@ -32,6 +32,10 @@ public class TriangleComponent extends JComponent
     {  
         super.paintComponent( g );
         Graphics2D g2 = (Graphics2D) g;
+        g2.draw(circle);
+        g2.draw(line1);
+        g2.draw(line2);
+        g2.draw(line3);
     }
 
     public class TriangleListener implements MouseListener
@@ -41,7 +45,6 @@ public class TriangleComponent extends JComponent
         {
             mouseX = e.getX();
             mouseY = e.getY();
-            System.out.println("clicked!");
             clickCount++;
             if(clickCount == 1)
             {
@@ -70,7 +73,7 @@ public class TriangleComponent extends JComponent
                 line3 = null;
                 clickCount = 0;
             }
-
+            repaint();
         }
 
         @Override
