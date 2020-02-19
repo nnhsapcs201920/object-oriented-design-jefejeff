@@ -11,13 +11,13 @@ public class TriangleComponent extends JComponent
 {
     private static final int MAX_POINTS = 3;
     private int clickCount = 0;
-    private Point2D.Double point1 = null;
-    private Ellipse2D.Double circle = null;
-    private Point2D.Double point2 = null;
-    private Line2D.Double line1 = null;
-    private Point2D.Double point3 = null;
-    private Line2D.Double line2 = null;
-    private Line2D.Double line3 = null;
+    private Point2D.Double point1 = new Point2D.Double();
+    private Ellipse2D.Double circle = new Ellipse2D.Double();
+    private Point2D.Double point2 = new Point2D.Double();
+    private Line2D.Double line1 = new Line2D.Double();
+    private Point2D.Double point3 = new Point2D.Double();
+    private Line2D.Double line2 = new Line2D.Double();
+    private Line2D.Double line3 = new Line2D.Double();
     private int mouseX;
     private int mouseY;
 
@@ -54,23 +54,24 @@ public class TriangleComponent extends JComponent
             else if (clickCount == 2)
             {
                 point2 = new Point2D.Double(mouseX, mouseY);
-                circle = null;
+                circle = new Ellipse2D.Double();
                 line1 = new Line2D.Double(point1.getX(), point1.getY(), point2.getX(), point2.getY());
             }
             else if (clickCount == 3)
             {
                 point3 = new Point2D.Double(mouseX, mouseY);
                 line2 = new Line2D.Double(point1.getX(), point1.getY(), point3.getX(), point3.getY());
-                line2 = new Line2D.Double(point1.getX(), point1.getY(), point3.getX(), point3.getY());
+                line3 = new Line2D.Double(point2.getX(), point2.getY(), point3.getX(), point3.getY());
             }
             else
             {
-                point1 = null;
-                point2 = null;
-                point3 = null;
-                line1 = null;
-                line2 = null;
-                line3 = null;
+                point1 = new Point2D.Double();
+                circle = new Ellipse2D.Double();
+                point2 = new Point2D.Double();
+                line1 = new Line2D.Double();
+                point3 = new Point2D.Double();
+                line2 = new Line2D.Double();
+                line3 = new Line2D.Double();
                 clickCount = 0;
             }
             repaint();
