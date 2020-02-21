@@ -43,7 +43,11 @@ public final class Piece {
      */
     private Piece(Point[] points)
     {
-        // TODO: implement constructor
+        this.body = points;
+        for(Point pointy : body)
+        {
+            pointy.get
+        }
     }   
 
     /**
@@ -188,7 +192,7 @@ public final class Piece {
      */
     private static Piece pieceRow(Piece firstPiece)
     {
-        // TODO: implement method
+        //   TODO: implement method
     }
 
     /**
