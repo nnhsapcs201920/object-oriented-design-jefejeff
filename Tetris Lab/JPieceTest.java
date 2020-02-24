@@ -46,8 +46,10 @@ class JPieceTest extends JComponent
         {
             this.drawPiece(g2, piece, rect);
             piece = piece.nextRotation();
+            if(piece == null)
+                break;
             rect.setRect(rect.getX() + rectWidth, rect.getY(),
-                    rect.getWidth(), rect.getHeight());
+                rect.getWidth(), rect.getHeight());
         }
         while(piece != this.root);
     }
@@ -84,7 +86,7 @@ class JPieceTest extends JComponent
             g2.setColor(Color.RED);
             String desc = "w:" + piece.getWidth() + " h:" + piece.getHeight();
             g2.drawString(desc, (float)(r.getX() + 1),
-                    (float)(r.getY() + (4 * pixelSize) - 2));
+                (float)(r.getY() + (4 * pixelSize) - 2));
 
             g2.setColor(Color.BLACK);
         }

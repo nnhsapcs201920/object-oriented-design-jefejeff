@@ -24,9 +24,9 @@ public final class Piece {
      */
 
     private Point[] body;
-    private int[] skirt;
     private int width;
     private int height;
+    private int[] skirt;
     private Piece next; // "next" rotation
 
     static private Piece[] pieces;  // singleton array of first rotations
@@ -43,10 +43,56 @@ public final class Piece {
      */
     private Piece(Point[] points)
     {
-        this.body = points;
-        for(Point pointy : body)
+        //initializing array of points
+        body = new Point[points.length];
+        for(int i = 0; i < points.length; i++)
         {
-            pointy.get
+            int x = (int) points[i].getX();
+            int y = (int) points[i].getY();
+            Point newPoint = new Point(x, y);
+            this.body[i] = newPoint;
+        }
+
+        //calculating width
+        int maxX = 0;
+        for(Point pointy : points)
+        {
+            if(maxX < pointy.getX())
+            {
+                maxX = (int) pointy.getX();
+            }
+        }
+        width = maxX;
+
+        //calculating height
+        int maxY = 0;
+        for(Point pointy : points)
+        {
+            if(maxY < pointy.getY())
+            {
+                maxY = (int) pointy.getY();
+            }
+        }
+        height = maxY;
+
+        //initializing skirt
+        skirt = new int[width];
+        for(int inty : skirt)
+        {
+            int minY = Integer.MAX_VALUE;
+            int i = 0;
+            for(Point pointy : points)
+            {
+                if(pointy.getX() == i)
+                {
+                    if(pointy.getY() < minY)
+                    {
+                        minY = (int) pointy.getY();
+                    }
+                }
+            }
+            skirt[i] = minY;
+            i++;
         }
     }   
 
@@ -193,6 +239,7 @@ public final class Piece {
     private static Piece pieceRow(Piece firstPiece)
     {
         //   TODO: implement method
+        return firstPiece;
     }
 
     /**
