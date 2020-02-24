@@ -62,7 +62,7 @@ public final class Piece {
                 maxX = (int) pointy.getX();
             }
         }
-        width = maxX;
+        width = maxX + 1;
 
         //calculating height
         int maxY = 0;
@@ -73,14 +73,13 @@ public final class Piece {
                 maxY = (int) pointy.getY();
             }
         }
-        height = maxY;
+        height = maxY + 1;
 
         //initializing skirt
         skirt = new int[width];
-        for(int inty : skirt)
+        for(int i = 0; i < width; i++)
         {
             int minY = Integer.MAX_VALUE;
-            int i = 0;
             for(Point pointy : points)
             {
                 if(pointy.getX() == i)
@@ -92,7 +91,6 @@ public final class Piece {
                 }
             }
             skirt[i] = minY;
-            i++;
         }
     }   
 
@@ -238,7 +236,16 @@ public final class Piece {
      */
     private static Piece pieceRow(Piece firstPiece)
     {
-        //   TODO: implement method
+        Point [] newBody = new Point[firstPiece.getBody().length];
+        for(int i = 0; i < firstPiece.getBody().length; i++)
+        {
+            int newX = 0 - (int) firstPiece.getBody()[i].getY() + firstPiece.getWidth();
+            int newY = (int) firstPiece.getBody()[i].getX();
+            Point newPoint = new Point(newX, newY);
+            newBody[i] = newPoint;
+        }
+        Piece newPiece = new Piece(newBody);
+        firstPiece.next = newPiece;
         return firstPiece;
     }
 
