@@ -11,14 +11,12 @@ import java.awt.Point;
  *  @author    Nick Parlante
  *  @version   1.0, Mar 1, 2001
  */
- 
- 
- /*
-  * NB: The board is naturally organized into rows and columns. However, pieces
-  *      are organized on an x-y coordinate system. The conversion between rows
-  *      and columns and y and x values can be confusing. Be careful.
-  */
 
+/*
+ * NB: The board is naturally organized into rows and columns. However, pieces
+ *      are organized on an x-y coordinate system. The conversion between rows
+ *      and columns and y and x values can be confusing. Be careful.
+ */
 
 public class Board
 {
@@ -37,7 +35,7 @@ public class Board
 
     private boolean committed;
 
-	// set DEBUG to true while developing the lab to enable sanity checks
+    // set DEBUG to true while developing the lab to enable sanity checks
     private boolean DEBUG = true;
 
     /**
@@ -48,6 +46,18 @@ public class Board
      */
     public Board(int initialWidth, int initialHeight)
     {
+        this.width = initialWidth;
+        this.height = initialHeight;
+        grid = new boolean [width] [height];
+        rowWidths = new int[width];
+        colHeights = new int[height];
+        maxHeight = 0;
+
+        gridBackup = new boolean [width] [height];
+        rowWidthsBackup =  new int[width];
+        colHeightsBackup = new int[height];
+        maxHeightBackup = 0;
+
         // TODO: implement constructor
     }
 
@@ -97,6 +107,9 @@ public class Board
      */
     public int dropHeight(Piece piece, int col)
     {
+        //Nota bene: The board is naturally organized into rows and columns.
+        //However, pieces are organized on an x-y coordinate system.
+        //The conversion between rows and columns and y and x values can be confusing. Be careful.
         // TODO: implement method
     }
 
@@ -166,10 +179,10 @@ public class Board
      */
     public int place(Piece piece, int placeCol, int placeRow)
     {
-    	/*
-    	 * PSEUDOCODE:
-    	 *	1. backup the current state of the board
-    	 *  2. for each point in the piece's body:
+        /*
+         * PSEUDOCODE:
+         *	1. backup the current state of the board
+         *  2. for each point in the piece's body:
          *      check if it collides with another piece,
          *      update the row widths,
          *      update the column height if needed,
@@ -177,8 +190,8 @@ public class Board
          *  3. check for completed rows (could be part of step 2)
          *	4. return status code for the placement
          */
-         
-         // TODO: implement method
+
+        // TODO: implement method
     }
 
     /**
@@ -197,7 +210,7 @@ public class Board
     {
         // TODO: implement method
     }
-    
+
     /**
      * If a place() happens, optionally followed by a clearRows(), a subsequent
      *      undo() reverts the board to its state before the place(). If the

@@ -236,16 +236,32 @@ public final class Piece {
      */
     private static Piece pieceRow(Piece firstPiece)
     {
-        Point [] newBody = new Point[firstPiece.getBody().length];
-        for(int i = 0; i < firstPiece.getBody().length; i++)
+        //alternatively, mirror over y = x, and then mirror over the midpoint
+        //1. copy body of current piece
+        //currentPiece = firstPiece
+        Piece currentPiece = firstPiece;
+        for(int j = 0; j < 4; j++)
         {
-            int newX = 0 - (int) firstPiece.getBody()[i].getY() + firstPiece.getWidth();
-            int newY = (int) firstPiece.getBody()[i].getX();
-            Point newPoint = new Point(newX, newY);
-            newBody[i] = newPoint;
+            Point [] newBody = new Point[currentPiece.getBody().length];
+            for(int i = 0; i < currentPiece.getBody().length; i++)
+            {
+                int newX = 0 - (int) currentPiece.getBody()[i].getY() + currentPiece.getHeight() - 1;
+                int newY = (int) currentPiece.getBody()[i].getX();
+                Point newPoint = new Point(newX, newY);
+                newBody[i] = newPoint;
+            }
+            Piece newPiece = new Piece(newBody);
+            if(newPiece.equals(firstPiece))
+            {
+                currentPiece.next = firstPiece;
+                break;
+            }
+            else
+            {
+                currentPiece.next = newPiece;
+                currentPiece = newPiece;
+            }
         }
-        Piece newPiece = new Piece(newBody);
-        firstPiece.next = newPiece;
         return firstPiece;
     }
 
