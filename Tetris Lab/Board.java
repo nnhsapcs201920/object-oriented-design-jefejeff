@@ -48,17 +48,18 @@ public class Board
     {
         this.width = initialWidth;
         this.height = initialHeight;
-        grid = new boolean [width] [height];
-        rowWidths = new int[width];
-        colHeights = new int[height];
-        maxHeight = 0;
 
-        gridBackup = new boolean [width] [height];
-        rowWidthsBackup =  new int[width];
-        colHeightsBackup = new int[height];
-        maxHeightBackup = 0;
+        this.grid = new boolean[this.height][this.width];
+        this.rowWidths = new int[this.height];
+        this.colHeights = new int[this.width];
+        this.maxHeight = 0;
 
-        // TODO: implement constructor
+        this.gridBackup = new boolean[this.height][this.width];
+        this.rowWidthsBackup = new int[this.height];
+        this.colHeightsBackup = new int[this.width];
+        this.maxHeightBackup = 0;
+
+        this.committed = true;
     }
 
     /**
@@ -107,10 +108,17 @@ public class Board
      */
     public int dropHeight(Piece piece, int col)
     {
-        //Nota bene: The board is naturally organized into rows and columns.
-        //However, pieces are organized on an x-y coordinate system.
-        //The conversion between rows and columns and y and x values can be confusing. Be careful.
-        // TODO: implement method
+        int maxRow = 0;
+        for(int i = 0; i < piece.getSkirt().length; i++)
+        {
+            int row = this.getColumnHeight(col + i) - piece.getSkirt()[i];
+            if(row > maxRow)
+            {
+                maxRow = row;
+            }
+        }
+
+        return maxRow;
     }
 
     /**
@@ -179,19 +187,78 @@ public class Board
      */
     public int place(Piece piece, int placeCol, int placeRow)
     {
+        // assume that the piece is placed successfully
+        int status = PLACE_OK;
+
+        // place cannot be invoked on a board that has not been committed
+        assert(this.committed);
+
+        // backup the current state of the board
+        this.committed = false;
+        for(int row = 0; row < this.getHeight(); row++)
+        {
+            System.arraycopy(this.grid[row], 0, this.gridBackup[row],
+                0, this.grid[row].length);
+        }
+        System.arraycopy(this.rowWidths, 0, this.rowWidthsBackup,
+            0, this.rowWidths.length);
+        System.arraycopy(this.colHeights, 0, this.colHeightsBackup,
+            0, this.colHeights.length);
+        this.maxHeightBackup = this.maxHeight;
+
+        // check for out of bounds
+        if(placeCol + piece.getWidth() > getWidth() ||
+        placeRow + piece.getHeight() > getHeight() ||
+        placeCol < 0 || placeRow < 0)
+        {
+            return PLACE_OUT_BOUNDS;
+        }
+
         /*
-         * PSEUDOCODE:
-         *	1. backup the current state of the board
-         *  2. for each point in the piece's body:
+         * for each point in the piece's body:
          *      check if it collides with another piece,
          *      update the row widths,
-         *      update the column height if needed,
-         *      update the max height if needed,
-         *  3. check for completed rows (could be part of step 2)
-         *	4. return status code for the placement
+         *      update the column height (potentially),
+         *      update the max height (potentially)
          */
 
-        // TODO: implement method
+        for(Point pt : piece.getBody())
+        {
+            int pointCol = placeCol + pt.x;
+            int pointRow = placeRow + pt.y;
+
+            if(grid[pointRow][pointCol])
+            {
+                status = PLACE_BAD;
+            }
+            else
+            {
+                grid[pointRow][pointCol] = true;
+                this.rowWidths[pointRow]++;
+                if(pointRow + 1 > this.colHeights[pointCol])
+                {
+                    this.colHeights[pointCol] = pointRow + 1;
+                }
+
+                if(pointRow + 1 > this.getMaxHeight())
+                {
+                    this.maxHeight = pointRow + 1;
+                }
+            }
+        }
+
+        // check for completed rows
+        for(int i = 0; i < piece.getHeight() && status == PLACE_OK; i++)
+        {
+            if(this.getRowWidth(placeRow + i) == this.getWidth())
+            {
+                status = PLACE_ROW_FILLED;
+            }
+        }
+
+        sanityCheck();
+
+        return status;
     }
 
     /**
@@ -208,7 +275,78 @@ public class Board
      */
     public boolean clearRows()
     {
-        // TODO: implement method
+        int toRow = -1;
+        int fromRow = 0;
+        int maxHeightAdj = 0;
+
+        // find the first filled row
+        for(int row = 0; row < this.getHeight(); row++)
+        {
+            if(this.getRowWidth(row) == this.getWidth())
+            {
+                toRow = row;
+                fromRow = toRow + 1;
+                maxHeightAdj++;
+
+                // find the next unfilled row
+                while(fromRow < this.getMaxHeight() &&
+                this.getRowWidth(fromRow) == this.getWidth())
+                {
+                    fromRow++;
+                    maxHeightAdj++;
+                }
+
+                break;
+            }
+        }
+
+        if(toRow == -1)
+        {
+            sanityCheck();
+            return false;
+        }
+
+        // if there is a row to clear...
+
+        while(fromRow < this.getMaxHeight())
+        {
+            this.grid[toRow] = this.grid[fromRow];
+            this.rowWidths[toRow] = this.rowWidths[fromRow];
+            toRow++;
+            fromRow++;
+
+            // find the next unfilled row
+            while(fromRow < this.getMaxHeight() &&
+            this.getRowWidth(fromRow) == this.getWidth())
+            {
+                fromRow++;
+                maxHeightAdj++;
+            }
+        }
+
+        // copy blank rows
+        for( ; toRow < this.getHeight(); toRow++)
+        {
+            this.grid[toRow] = new boolean[this.getWidth()];
+            this.rowWidths[toRow] = 0;
+        }
+
+        // update column heights
+        for( int col = 0; col < this.getWidth(); col++)
+        {
+            while(this.colHeights[col] > 0 &&
+            ! this.grid[this.colHeights[col] - 1][col])
+            {
+                this.colHeights[col]--;
+            }
+        }
+
+        // update max height
+        this.maxHeight -= maxHeightAdj;
+
+        sanityCheck();
+
+        return true;
     }
 
     /**
@@ -220,7 +358,29 @@ public class Board
      */
     public void undo()
     {
-        // TODO: implement method
+        if(! this.committed)
+        {
+            int[] tempHeights = this.colHeights;
+            this.colHeights = this.colHeightsBackup;
+            this.colHeightsBackup = tempHeights;
+
+            int[] tempWidths = this.rowWidths;
+            this.rowWidths = this.rowWidthsBackup;
+            this.rowWidthsBackup = tempWidths;
+
+            for(int row = 0; row < this.getHeight(); row++)
+            {
+                boolean[] tempRow = this.grid[row];
+                this.grid[row] = this.gridBackup[row];
+                this.gridBackup[row] = tempRow;
+            }
+
+            this.maxHeight = this.maxHeightBackup;
+
+            this.committed = true;
+        }
+
+        sanityCheck();
     }
 
     /**
