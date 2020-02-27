@@ -13,7 +13,7 @@ public class BrainFactory
      * Create a list of references to objects whose classes implement the Brain
      *      interface
      *
-     * @return a list of referenes to objects whose classes implement the Brain
+     * @return a list of references to objects whose classes implement the Brain
      *      interface
      */
     public static ArrayList<Brain> createBrains()
@@ -25,6 +25,13 @@ public class BrainFactory
          *      the list.
          */
         
+        ArrayList<Brain> theLads = new ArrayList<Brain>();
         
+        Brain echen = new SimpleBrain();
+        Brain ewang = new SmallBrain();
+        theLads.add(echen);
+        theLads.add(ewang);
+        
+        return theLads;
     }
 }
