@@ -16,6 +16,12 @@ public class JBrainTetris extends JTetris
     //currently selected Brain
     private Brain myOneBrainCell;
 
+    //Brain on/off
+    private boolean power;
+
+    //bestMove
+    private Move bestMove;
+
     /**
      * Constructor for objects of class JBrainTetris
      */
@@ -57,30 +63,59 @@ public class JBrainTetris extends JTetris
         //adding JComboBox to Control Panel
         panel.add(boxy);
 
-        //creating JButton WORK IN PROGRESS
+        //creating JButton
+
+        JButton button = new JButton();
         if(!testMode)
         {
-            JButton button = new JButton("Enable Brain");
-            button.addActionListener( new ActionListener()
-                {
-                    public void actionPerformed(ActionEvent e)
-                    {
-                        myOneBrainCell = (Brain) boxy.getSelectedItem();
-                    }
-                });
+            button.setText("Enable brain");
+            power = false;
+        }
+        else if (testMode)
+        {
+            button.setText("Disable brain");
+            power = true;
         }
 
-        if(testMode)
-        {
-            JButton button = new JButton("Disable Brain");
-            button.addActionListener( new ActionListener()
+        //adding listener
+        button.addActionListener( new ActionListener()
+            {
+                public void actionPerformed(ActionEvent e)
                 {
-                    public void actionPerformed(ActionEvent e)
+                    if(!power)
                     {
-                        myOneBrainCell = (Brain) boxy.getSelectedItem();
+                        power = true;
+                        button.setText("Disable brain");
                     }
-                });
-        }
+                    else if (power)
+                    {
+                        power = false;
+                        button.setText("Enable brain");
+                    }
+                }
+            });
+
+        //adding button to panel
+        panel.add(button);
+
         return panel;
+    }
+
+    /**
+     * Selects the next piece to use using the random generator set in startGame().
+     */
+    @Override
+    public Piece pickNextPiece()
+    {
+        //invoking super
+        Piece p = super.pickNextPiece();
+
+        //commit board
+        this.board.commit();
+
+        //calculating bestMove
+        bestMove = myOneBrainCell.bestMove(board, p, 20, null);
+
+        return p;
     }
 }
