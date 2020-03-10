@@ -18,20 +18,17 @@ public class BrainFactory
      */
     public static ArrayList<Brain> createBrains()
     {
-        /*
-         * TODO: add instances of SimpleBrain and SmallBrain to the list.
-         * 
-         * If you do the BigBrain extension, also add an instance of BigBrain to
-         *      the list.
-         */
-        
+        //creating ArrayList of type <Brain>        
         ArrayList<Brain> theLads = new ArrayList<Brain>();
-        
+
+        //creating the Brains
         Brain echen = new SimpleBrain();
         Brain ewang = new SmallBrain();
+
+        //adding the Brains to the ArrayList
         theLads.add(echen);
         theLads.add(ewang);
-        
+
         return theLads;
     }
 }

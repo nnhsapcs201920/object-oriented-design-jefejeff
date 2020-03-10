@@ -236,26 +236,34 @@ public final class Piece {
      */
     private static Piece pieceRow(Piece firstPiece)
     {
-        //alternatively, mirror over y = x, and then mirror over the midpoint
-        //1. copy body of current piece
-        //currentPiece = firstPiece
+        //creating a copy of the firstPiece
         Piece currentPiece = firstPiece;
+
+        //loops 4 times, each rotation of 90 degrees cannot go further than 360 degrees
         for(int j = 0; j < 4; j++)
         {
+            //creates a new array of Points
             Point [] newBody = new Point[currentPiece.getBody().length];
+
             for(int i = 0; i < currentPiece.getBody().length; i++)
             {
+                //rotates around the origin (0,0), and translates it according to the new width (the previous height)
                 int newX = 0 - (int) currentPiece.getBody()[i].getY() + currentPiece.getHeight() - 1;
                 int newY = (int) currentPiece.getBody()[i].getX();
                 Point newPoint = new Point(newX, newY);
                 newBody[i] = newPoint;
             }
+            //creates a new Piece with the new array of Points
             Piece newPiece = new Piece(newBody);
+
+            //checks for repeating pieces
             if(newPiece.equals(firstPiece))
             {
                 currentPiece.next = firstPiece;
                 break;
             }
+
+            //continues if piece has not shown up before
             else
             {
                 currentPiece.next = newPiece;

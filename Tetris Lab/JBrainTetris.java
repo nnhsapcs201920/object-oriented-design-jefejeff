@@ -16,23 +16,27 @@ public class JBrainTetris extends JTetris
     //currently selected Brain
     private Brain myOneBrainCell;
 
-    //Brain on/off
+    //checking if the Brain is on/off
     private boolean power;
 
-    //bestMove
+    //the best move
     private Move bestMove;
 
     /**
      * Constructor for objects of class JBrainTetris
+     * 
+     * @param width     the width of the window
+     * @param height    the height of the window
      */
     public JBrainTetris(int width, int height)
     {
+        //calls super constructor
         super(width, height);
     }
 
     @Override
     /**
-     * Creates the panel of UI controls.
+     * Creates the panel of UI controls, with additional elements
      */
     public java.awt.Container createControlPanel()
     {
@@ -43,20 +47,23 @@ public class JBrainTetris extends JTetris
         BrainFactory panthers = new BrainFactory();
         ArrayList<Brain> theLads = panthers.createBrains();
 
-        //creating JComboBox
+        //creating an Array and converting the ArrayList into an Array
         Brain [] brains = new Brain[theLads.size()];
         for(int i = 0; i < brains.length; i++)
         {
             brains[i] = theLads.get(i);
         }
+
+        //creating JComboBox and initializing the Brain to the first item in the JComboBox
         JComboBox boxy = new JComboBox(brains);
         myOneBrainCell = brains[0];
 
-        //creating ActionListener
+        //creating ActionListener (copied from JTetris)
         boxy.addActionListener( new ActionListener()
             {
                 public void actionPerformed(ActionEvent e)
                 {
+                    //changing selected Brain
                     myOneBrainCell = (Brain) boxy.getSelectedItem();
                 }
             });
@@ -65,8 +72,9 @@ public class JBrainTetris extends JTetris
         panel.add(boxy);
 
         //creating JButton
-
         JButton button = new JButton();
+
+        //checking for testMode to initialize starting text and if the Brain is enabled
         if(!testMode)
         {
             button.setText("Enable brain");
@@ -78,11 +86,12 @@ public class JBrainTetris extends JTetris
             power = true;
         }
 
-        //adding listener
+        //creating ActionListener (copied from JTetris)
         button.addActionListener( new ActionListener()
             {
                 public void actionPerformed(ActionEvent e)
                 {
+                    //toggling Brain on and off, as well as switching text labels
                     if(!power)
                     {
                         power = true;
@@ -103,7 +112,10 @@ public class JBrainTetris extends JTetris
     }
 
     /**
-     * Selects the next piece to use using the random generator set in startGame().
+     * Selects the next piece to use using the random generator set in startGame(), as well
+     *      as calculating the bestMove and initializing it
+     * 
+     * @return      the next Piece
      */
     @Override
     public Piece pickNextPiece()
@@ -111,7 +123,7 @@ public class JBrainTetris extends JTetris
         //invoking super
         Piece p = super.pickNextPiece();
 
-        //commit board
+        //commiting board
         this.board.commit();
 
         //calculating bestMove
@@ -120,22 +132,45 @@ public class JBrainTetris extends JTetris
         return p;
     }
 
+    /**
+     * Called to change the position of the current piece. Before this is called, the piece is at some location in the board.
+     *      This advances the piece to be at its next location. This override moves the piece a bit first (if the brain is enabled).
+     *      The brain may do up to one rotation and one left/right move each time tick() is called.
+     *      The piece should drift down to its correct place.
+     *      
+     *      @param verb     should be DOWN, called by the brain to tick
+     */
     @Override
     public void tick(int verb)
     {
-        super.tick(DOWN);
-        if(this.currentX < bestMove.x)
+        //checking if Brain is enabled
+        if(power)
         {
-            super.tick(RIGHT);
+            //moving the piece down
+            super.tick(DOWN);
+
+            //if the piece is left of the bestMove, moving the piece to the right
+            if(this.currentX < bestMove.x)
+            {
+                super.tick(RIGHT);
+            }
+
+            //if the piece is right of the bestMove, moving the piece to the left
+            else if (this.currentX > bestMove.x)
+            {
+                super.tick(LEFT);
+            }
+
+            //if the piece is not in the best direction, rotates the piece
+            if(!this.currentPiece.equals(bestMove.piece))
+            {
+                super.tick(ROTATE);
+            }
         }
-        else if (this.currentX > bestMove.x)
-        {
-            super.tick(LEFT);
-        }
-        if(!this.currentPiece.equals(bestMove.piece))
-        {
-            super.tick(ROTATE);
-        }
+
+        //if not, play normally
+        else
+            super.tick(verb);
     }
 
 }
